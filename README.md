@@ -27,21 +27,22 @@ var options = {
 https.createServer(options, function (req, res) {
   res.writeHead(200);
   res.end("hello world\n");
-}).listen(8000);```
+}).listen(8000);
+```
 
 ## Args
 
 `split-ca('filepath','split-string','encoding')`
 
-### `filepath`
+#### `filepath`
 
 A standard node path to your object.  An error is thrown if the file cannot be parsed, is not formatted properly.
 
-### `split-string`
+#### `split-string`
 
 Optional.  Defaults to `"\n"`, can be replaced with anything.
 
-### `encoding`
+#### `encoding`
 
 Optional.  Defaults to `"utf-8"`, can be replaced with anything accepted by node's `fs` module.
 
