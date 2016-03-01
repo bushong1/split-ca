@@ -1,6 +1,6 @@
 {
   "name": "split-ca",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Simple module to split a single certificate authority chain file (aka: bundle, ca-bundle, ca-chain, etc.) into an array, as expected by the node.js tls api.",
   "main": "index.js",
   "scripts": {
