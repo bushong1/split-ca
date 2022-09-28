@@ -1,19 +1,23 @@
-var fs = require('fs');
+const fs = require('fs');
 
-module.exports = function (filepath, split, encoding) {
-  split = typeof split !== 'undefined' ? split : "\n";
-  encoding = typeof encoding !== 'undefined' ? encoding : "utf8";
+function splitFileSync(filepath, split = "\n", encoding = "utf8") {
+  const chain = fs.readFileSync(filepath, encoding);
+  return splitContent(chain, split);
+}
 
-  var ca = [];
-  var chain = fs.readFileSync(filepath, encoding);
-  if(chain.indexOf("-END CERTIFICATE-") < 0 || chain.indexOf("-BEGIN CERTIFICATE-") < 0){
+async function splitFile(filepath, split = "\n", encoding = "utf8") {
+  const chain = await fs.promises.readFile(filepath, encoding);
+  return splitContent(chain, split);
+}
+
+function splitContent(chain, split = "\n") {
+  const ca = [];
+  if (chain.indexOf("-END CERTIFICATE-") < 0 || chain.indexOf("-BEGIN CERTIFICATE-") < 0) {
     throw Error("File does not contain 'BEGIN CERTIFICATE' or 'END CERTIFICATE'");
   }
   chain = chain.split(split);
-  var cert = [];
-  var _i, _len;
-  for (_i = 0, _len = chain.length; _i < _len; _i++) {
-    var line = chain[_i];
+  let cert = [];
+  for (const line of chain) {
     if (!(line.length !== 0)) {
       continue;
     }
@@ -25,3 +29,9 @@ module.exports = function (filepath, split, encoding) {
   }
   return ca;
 }
+
+module.exports = splitFileSync;
+
+module.exports.splitFile = splitFile;
+module.exports.splitFileSync = splitFileSync;
+module.exports.splitContent = splitContent;

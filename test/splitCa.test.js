@@ -4,7 +4,6 @@ var split_ca = require("../index.js");
 
 describe('split', function(){
   var emptyFile = "test/certs/empty.ca";
-  var missingFile = "test/certs/missing.ca";
   var unreadableFile = "test/certs/unreadable.ca";
   var garbageFile = "test/certs/garbage.ca";
   var ca0file = "test/certs/split0.ca";
@@ -41,5 +40,16 @@ describe('split', function(){
     it('should throw a bad file error', function(){
       expect(function(){ split_ca(garbageFile)}).to.throw(Error);
     });
+  });
+  it('can be done with a PEM string, not just a file', async function(){
+    const content = await fs.promises.readFile(caBundleFile, 'utf-8');
+    const split = split_ca.splitContent(content);
+    expect(split).to.be.an("array");
+    expect(split).to.have.members([ca0, ca1]);
+  });
+  it('can use Promises', async function(){
+    const split = await split_ca.splitFile(caBundleFile);
+    expect(split).to.be.an("array");
+    expect(split).to.have.members([ca0, ca1]);
   });
 });
